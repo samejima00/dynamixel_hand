@@ -1,0 +1,26 @@
+(load "rhp3hand_r-interface.l")
+
+(defun init ()
+  (rhp3hand_r-init)
+  (setq *robot* *rhp3hand_r*)
+  (objects (list *robot*))
+  )
+
+(defun grasp-motion ()
+  (send *robot* :hook-pose)
+  (send *ri* :angle-vector (send *robot* :angle-vector) 1000)
+  (send *ri* :wait-interpolation)
+  (send *robot* :angle-vector #f(-90 30 60))
+  (send *ri* :angle-vector (send *robot* :angle-vector) 1000)
+  (send *ri* :wait-interpolation)
+  (send *robot* :angle-vector #f(-90 90 120))
+  (send *ri* :angle-vector (send *robot* :angle-vector) 1000)
+  (send *ri* :wait-interpolation)
+  )
+
+(defun release-motion ()
+  (send *robot* :hook-pose)
+  (send *ri* :angle-vector (send *robot* :angle-vector) 3000)
+  (send *ri* :wait-interpolation)
+  )
+
