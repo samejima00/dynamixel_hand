@@ -1,6 +1,6 @@
 ;;(load "package://hrpsys_ros_bridge/euslisp/rtm-ros-robot-interface.l")
 (load "package://pr2eus/robot-interface.l")
-(require :rhp3hand_l "package://rhp_dynamixel_hand/models/rhp3hand_l.l")
+(require :rhp3hand_l "package://dynamixel_hand/models/rhp3hand_l.l")
 (ros::load-ros-manifest "control_msgs")
 
 (defclass rhp3hand_l-interface

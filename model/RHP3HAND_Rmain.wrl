@@ -309,6 +309,8 @@ DEF RHP3HAND_R Humanoid {
           jointAxis 1 0 0
           ulimit [0.0]
           llimit [-1.58]
+          uvlimit 3.14
+          lvlimit -3.14
           children [
           DEF R_THUMB_LINK0 Segment {
             mass 0.03353
@@ -325,6 +327,8 @@ DEF RHP3HAND_R Humanoid {
             jointAxis 0 1 0
             ulimit [1.58]
             llimit [0.0]
+            uvlimit 3.14
+            lvlimit -3.14
             rotation 0 1 0 -1.5705
             children [
             DEF R_THUMB_LINK1 Segment {
@@ -346,6 +350,8 @@ DEF RHP3HAND_R Humanoid {
           jointAxis 0 0 1
           ulimit [3]
           llimit [-1.5]
+          uvlimit 3.14
+          lvlimit -3.14
           children [
           DEF R_MIDDLE_LINK0 Segment {
             mass 0.10963

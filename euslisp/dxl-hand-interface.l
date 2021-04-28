@@ -1,5 +1,5 @@
-(load "package://rhp_dynamixel_hand/euslisp/rhp3hand_r-interface.l")
-(load "package://rhp_dynamixel_hand/euslisp/rhp3hand_l-interface.l")
+(load "package://dynamixel_hand/euslisp/rhp3hand_r-interface.l")
+(load "package://dynamixel_hand/euslisp/rhp3hand_l-interface.l")
 
 (defun dxl-hand-init (&key (realp t))
   (setq *rhand* (instance rhp3hand_r-robot :init))
