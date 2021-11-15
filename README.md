@@ -1,8 +1,8 @@
 # dynamixel_hand
 ## setup
+
 このレポジトリの上のディレクトリで
-```git clone https://github.com/ROBOTIS-GIT/dynamixel-workbench.git
-```
+```git clone https://github.com/ROBOTIS-GIT/dynamixel-workbench.git```
 
 ```rlwrap roseus euslisp/dxl-hand-interface.l
 hand_model
