@@ -3,7 +3,9 @@
 
 このレポジトリの上のディレクトリで
 ```git clone https://github.com/ROBOTIS-GIT/dynamixel-workbench.git
-git clone https://github.com/ROBOTIS-GIT/dynamixel-workbench-msgs.git```
+git clone https://github.com/ROBOTIS-GIT/dynamixel-workbench-msgs.git
+git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git
+```
 
 ```rlwrap roseus euslisp/dxl-hand-interface.l
 hand_model
