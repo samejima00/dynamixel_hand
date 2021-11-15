@@ -1,12 +1,12 @@
 <launch>
   <arg name="usb_port"                default="/dev/ttyUSB0"/>
-  <arg name="dxl_baud_rate"           default="1000000"/>
+  <arg name="dxl_baud_rate"           default="57600"/>
   <arg name="namespace"               default="dynamixel_hand_controller"/>
 
   <arg name="use_moveit"              default="false"/>
   <arg name="use_joint_state"         default="true"/>
   <arg name="use_cmd_vel"             default="false"/>
-  <arg name="config_file" default="" />
+  <arg name="config_file" default="$(find dynamixel_hand)/config/left_hand.yaml" />
 
   <param name="dynamixel_info"          value="$(arg config_file)"/>
 

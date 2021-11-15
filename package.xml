@@ -58,6 +58,27 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <build_depend>dynamixel_workbench_controllers</build_depend>
+  <build_depend>dynamixel_workbench_msgs</build_depend>
+  <build_depend>dynamixel_workbench_toolbox</build_depend>
+  <build_depend>trajectory_msgs</build_depend>
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>dynamixel_nervous_msgs</build_depend>
+  <build_depend>dynamixel_nervous_common</build_depend>
+  <exec_depend>dynamixel_workbench_controllers</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>dynamixel_workbench_msgs</exec_depend>
+  <exec_depend>dynamixel_workbench_toolbox</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+  <exec_depend>cmake_modules</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
+  <exec_depend>dynamixel_nervous_msgs</exec_depend>
+  <exec_depend>dynamixel_nervous_common</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

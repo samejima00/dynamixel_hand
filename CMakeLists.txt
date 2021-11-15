@@ -11,14 +11,14 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  hrpsys_ros_bridge
+  #hrpsys_ros_bridge
   euscollada
   euslisp
   roseus
 )
 
-compile_openhrp_model(${PROJECT_SOURCE_DIR}/model/RHP3HAND_Rmain.wrl RHP3HAND_R)
-compile_openhrp_model(${PROJECT_SOURCE_DIR}/model/RHP3HAND_Lmain.wrl RHP3HAND_L)
+#compile_openhrp_model(${PROJECT_SOURCE_DIR}/model/RHP3HAND_Rmain.wrl RHP3HAND_R)
+#compile_openhrp_model(${PROJECT_SOURCE_DIR}/model/RHP3HAND_Lmain.wrl RHP3HAND_L)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 

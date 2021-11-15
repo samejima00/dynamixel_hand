@@ -1,6 +1,6 @@
 ;;(load "package://hrpsys_ros_bridge/euslisp/rtm-ros-robot-interface.l")
 (load "package://pr2eus/robot-interface.l")
-(require :rhp3hand_r "package://dynamixel_hand/models/rhp3hand_r.l")
+;;(require :rhp3hand_r "package://dynamixel_hand/models/rhp3hand_r.l")
 (ros::load-ros-manifest "control_msgs")
 
 (defclass rhp3hand_r-interface
@@ -29,6 +29,6 @@
 (defun rhp3hand_r-init (&rest args)
   (if (not (boundp '*ri*))
     (setq *ri* (instance* rhp3hand_r-interface :init args)))
-  (if (not (boundp '*rhp3hand_r*))
-    (setq *rhp3hand_r* (instance rhp3hand_r-robot :init)))
+;;  (if (not (boundp '*rhp3hand_r*))
+;;    (setq *rhp3hand_r* (instance rhp3hand_r-robot :init)))
   )

@@ -38,20 +38,30 @@ class DynamixelJointTrajectoryServer():
         pub_msg.header = goal.trajectory.header
         pub_msg.joint_names = self._joint_names
         hand_thumb_roll_id = goal.trajectory.joint_names.index(self._joint_names[0])
-        hand_thumb_pitch_id = goal.trajectory.joint_names.index(self._joint_names[1])
-        hand_middle_pitch_id = goal.trajectory.joint_names.index(self._joint_names[2])
+        hand_1st_inner_id = goal.trajectory.joint_names.index(self._joint_names[1])
+        hand_1st_outer_id = goal.trajectory.joint_names.index(self._joint_names[2])
+        hand_2nd_id = goal.trajectory.joint_names.index(self._joint_names[3])
+        hand_2nd_inner_id = goal.trajectory.joint_names.index(self._joint_names[4])
+        hand_2nd_outer_id = goal.trajectory.joint_names.index(self._joint_names[5])
         pub_msg.points = []
         wait_time = 0.0
         for p in goal.trajectory.points:
             point = JointTrajectoryPoint()
             point.positions = [
                     p.positions[hand_thumb_roll_id],
-                    p.positions[hand_thumb_pitch_id],
-                    p.positions[hand_middle_pitch_id]]
+                    p.positions[hand_1st_inner_id],
+                    p.positions[hand_1st_outer_id],
+                    p.positions[hand_2nd_id],
+                    p.positions[hand_2nd_inner_id],
+                    p.positions[hand_2nd_outer_id]]
             point.velocities = [
                     p.velocities[hand_thumb_roll_id],
-                    p.velocities[hand_thumb_pitch_id],
-                    p.velocities[hand_middle_pitch_id]]
+                    p.velocities[hand_1st_inner_id],
+                    p.velocities[hand_2nd_outer_id],
+                    p.velocities[hand_2nd_id],
+                    p.velocities[hand_2nd_inner_id],
+                    p.velocities[hand_2nd_outer_id]]
+
             point.time_from_start = p.time_from_start
             pub_msg.points.append(point)
             wait_time = p.time_from_start.to_sec()

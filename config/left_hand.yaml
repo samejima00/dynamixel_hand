@@ -1,16 +1,32 @@
-L_THUMB_JOINT0:
+joint_0:
+  ID: 0
+  Return_Delay_Time: 0
+  Operating_Mode: 5
+  Current_Limit: 1000
+joint_1:
   ID: 1
   Return_Delay_Time: 0
   Operating_Mode: 5
-  Current_Limit: 740
-L_THUMB_JOINT1:
+  Current_Limit: 1000
+joint_2:
   ID: 2
   Return_Delay_Time: 0
   Operating_Mode: 5
-  Current_Limit: 740
-L_MIDDLE_JOINT0:
+  Current_Limit: 1000
+  #Homing_Offset: -341
+joint_3:
   ID: 3
   Return_Delay_Time: 0
   Operating_Mode: 5
-  Current_Limit: 740
-  Homing_Offset: -341
+  Current_Limit: 1000
+joint_4:
+  ID: 4
+  Return_Delay_Time: 0
+  Operating_Mode: 5
+  Current_Limit: 1000
+joint_5:
+  ID: 5
+  Return_Delay_Time: 0
+  Operating_Mode: 5
+  Current_Limit: 1000
+      
