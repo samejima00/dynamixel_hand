@@ -43,6 +43,7 @@ class DynamixelJointTrajectoryServer():
         hand_2nd_id = goal.trajectory.joint_names.index(self._joint_names[3])
         hand_2nd_inner_id = goal.trajectory.joint_names.index(self._joint_names[4])
         hand_2nd_outer_id = goal.trajectory.joint_names.index(self._joint_names[5])
+        hand_45_id = goal.trajectory.joint_names.index(self._joint_names[6])
         pub_msg.points = []
         wait_time = 0.0
         for p in goal.trajectory.points:
@@ -53,14 +54,16 @@ class DynamixelJointTrajectoryServer():
                     p.positions[hand_1st_outer_id],
                     p.positions[hand_2nd_id],
                     p.positions[hand_2nd_inner_id],
-                    p.positions[hand_2nd_outer_id]]
+                    p.positions[hand_2nd_outer_id],
+                    p.positions[hand_45_id]]
             point.velocities = [
                     p.velocities[hand_thumb_roll_id],
                     p.velocities[hand_1st_inner_id],
                     p.velocities[hand_2nd_outer_id],
                     p.velocities[hand_2nd_id],
                     p.velocities[hand_2nd_inner_id],
-                    p.velocities[hand_2nd_outer_id]]
+                    p.velocities[hand_2nd_outer_id],
+                    p.velocities[hand_45_id]]
 
             point.time_from_start = p.time_from_start
             pub_msg.points.append(point)

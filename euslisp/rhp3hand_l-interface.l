@@ -1,6 +1,6 @@
 ;;(load "package://hrpsys_ros_bridge/euslisp/rtm-ros-robot-interface.l")
 (load "package://pr2eus/robot-interface.l")
-(require :rhp3hand_l "package://dynamixel_hand/euslisp/hand_model.l")
+(require :rhp3hand_l "package://dynamixel_hand/euslisp/hand_model5.l")
 (ros::load-ros-manifest "control_msgs")
 
 (defclass rhp3hand_l-interface
@@ -10,7 +10,7 @@
   (:init
     (&rest args);; (&rest args &key ((:controller-timeout ct) 5))
     (prog1
-      (send-super* :init :robot hand_model-robot args)
+      (send-super* :init :robot hand_model5-robot args)
       (send self :add-controller :default-controller)
     )
     )
