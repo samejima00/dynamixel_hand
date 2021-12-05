@@ -84,7 +84,7 @@
       (sethash link-name cube-table
 	       (list (make-cube 10 100 10) (make-cube 10 100 10) (make-cube 10 100 10)))
       (sethash link-name color-table
-	       (list (float-vector 0 1 0) (float-vector 0 1 0) (float-vector 0 1 0)))
+	       (list (float-vector 0 1 0) (float-vector 0 1 0) (float-vector 0 1 0))))
     ;; Move cube
     (send (elt (gethash "1st_Link" cube-table) 0)
 	  :translate #f(10 0 10))
