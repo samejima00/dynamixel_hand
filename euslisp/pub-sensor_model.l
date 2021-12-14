@@ -1,13 +1,38 @@
 #!/usr/bin/env roseus
 
 (ros::roseus "test_pub_marker")
+(ros::roseus-add-msgs "std_msgs")
 
 (defvar *pub-cube-array-topic* "/cube_array_topic")
 (defvar *pub-cube-topic* "/cube_topic")
+(defvar *sub-sensor-data* "/touch_data")
+
+(defun callback (msg)
+  ;;(print (list 'a (send msg :data)))
+  (setq *result-msg* (send msg :data)))
 
 (ros::advertise *pub-cube-array-topic* visualization_msgs::MarkerArray 5)
 (ros::advertise *pub-cube-topic* visualization_msgs::Marker 5)
+(ros::subscribe "/touch_data" std_msgs::Float32MultiArray #'callback)
+
 (unix:usleep (* 1000 1000))
+
+(setq *result-msg* (float-vector 0 0 0 0))
+
+
+(defun color (max min val)
+  (cond
+    ((and (< min val) (< val max))
+          (print "waiwai")
+	  (return-from color (float-vector 0 0 1)))
+    (t (float-vector 0 1 0)))
+  )
+
+(setq sensor-data (make-matrix 4 2
+      '((450 700)
+      (610 715)
+      (470 685)
+      (620 735))))
 
 ;; (defun test-pub ()
 ;;   (let* ((cube-array-msg (instance visualization_msgs::MarkerArray :init))
@@ -70,11 +95,13 @@
 ;;     )
 
 (defun test-pub ()
+ (do-until-key
   (let* ((cube-array-msg (instance visualization_msgs::MarkerArray :init))
 	 (link-names (list "1st_Link" "1st_Link2" "2nd_fing_Link" "2nd_fing_Link2"))
 	 (header-table (make-hash-table :test #'equal))
 	 (cube-table (make-hash-table :test #'equal))
 	 (color-table (make-hash-table :test #'equal))
+	 (sensor-table (make-hash-table :test #'equal))
 	 cube-list)
     ;; Set header and cube for each link
     (dolist (link-name link-names)
@@ -86,53 +113,83 @@
 	       (list (make-cube 10 1 10) (make-cube 10 1 10) (make-cube 10 1 10) (make-cube 10 1 10)))
       (sethash link-name color-table
 	       (list (float-vector 0 1 0) (float-vector 0 1 0) (float-vector 0 1 0) (float-vector 0 1 0))))
-    ;; Move cube
+   ;; Move cube
     (send (elt (gethash "1st_Link" cube-table) 0)
-	  :translate #f(-8 -5 10))
-    (send (elt (gethash "1st_Link" cube-table) 1)
 	  :translate #f(-8 -5 20))
+    (send (elt (gethash "1st_Link" cube-table) 1)
+	  :translate #f(-8 -5 10))
     (send (elt (gethash "1st_Link" cube-table) 2)
-	  :translate #f(-8 5 10))
-    (send (elt (gethash "1st_Link" cube-table) 3)
 	  :translate #f(-8 5 20))
+    (send (elt (gethash "1st_Link" cube-table) 3)
+	  :translate #f(-8 5 10))
     (send (elt (gethash "1st_Link2" cube-table) 0)
-	  :translate #f(-8 -3 10))
-    (send (elt (gethash "1st_Link2" cube-table) 1)
 	  :translate #f(-8 -3 30))
+    (send (elt (gethash "1st_Link2" cube-table) 1)
+	  :translate #f(-8 -3 10))
     (send (elt (gethash "1st_Link2" cube-table) 2)
-	  :translate #f(-8 7 10))
-    (send (elt (gethash "1st_Link2" cube-table) 3)
 	  :translate #f(-8 7 30))
+    (send (elt (gethash "1st_Link2" cube-table) 3)
+	  :translate #f(-8 7 10))
 
     (send (elt (gethash "2nd_fing_Link" cube-table) 0)
-	  :translate #f(-8 -5 10))
+	  :rotate -0.5 :x)
     (send (elt (gethash "2nd_fing_Link" cube-table) 1)
-	  :translate #f(-8 -5 20))
+	  :rotate -0.5 :x)
     (send (elt (gethash "2nd_fing_Link" cube-table) 2)
-	  :translate #f(-8 5 10))
+	  :rotate -0.5 :x)
     (send (elt (gethash "2nd_fing_Link" cube-table) 3)
-	  :translate #f(-8 5 20))
-    (send (elt (gethash "2nd_fing_Link2" cube-table) 0)
+	  :rotate -0.5 :x)
+ 
+    (send (elt (gethash "2nd_fing_Link" cube-table) 0)
+	  :translate #f(-8 -3 20))
+    (send (elt (gethash "2nd_fing_Link" cube-table) 1)
 	  :translate #f(-8 -3 10))
-    (send (elt (gethash "2nd_fing_Link2" cube-table) 1)
-	  :translate #f(-8 -3 30))
-    (send (elt (gethash "2nd_fing_Link2" cube-table) 2)
+    (send (elt (gethash "2nd_fing_Link" cube-table) 2)
+	  :translate #f(-8 7 20))
+    (send (elt (gethash "2nd_fing_Link" cube-table) 3)
 	  :translate #f(-8 7 10))
-    (send (elt (gethash "2nd_fing_Link2" cube-table) 3)
+    (send (elt (gethash "2nd_fing_Link2" cube-table) 0)
+	  :translate #f(-8 -3 30))
+    (send (elt (gethash "2nd_fing_Link2" cube-table) 1)
+	  :translate #f(-8 -3 10))
+    (send (elt (gethash "2nd_fing_Link2" cube-table) 2)
 	  :translate #f(-8 7 30))
+    (send (elt (gethash "2nd_fing_Link2" cube-table) 3)
+	  :translate #f(-8 7 10))
 
-
+    (print *result-msg*)
 
     ;; Set color-table based on sensor value
     ;; TODO (sethash link-name color-table (float-vector ...))
     ;; Append each cube into list
+    (setq link-sets (list (list "1st_Link2" "1st_Link" 0) (list "2nd_fing_Link2" "2nd_fing_Link" 2)))
+    (dolist (link-set link-sets)
+      (setq minval_front (aref sensor-data 0 0))
+      (setq maxval_front (aref sensor-data 0 1))
+      (setq diff_front (- maxval_front minval_front))
+      (setq minval_back (aref sensor-data 1 0))
+      (setq maxval_back (aref sensor-data 1 1))
+      (setq diff_back (- maxval_back minval_back))
+      (print (elt link-set 2))
+      (sethash (elt link-set 0) color-table (list (color maxval_front (- maxval_front diff_front) (elt *result-msg* (elt link-set 2))) 
+					     (color (- maxval_front diff_front) (- maxval_front (* 2 diff_front)) (elt *result-msg* (elt link-set 2))) 
+					     (color maxval_back (- maxval_back diff_back) (elt *result-msg* (+ (elt link-set 2) 1))) 
+                                             (color (- maxval_back diff_back) (- maxval_back (* 2 diff_back)) (elt *result-msg* (+ (elt link-set 2) 1))))) 
+
+      (sethash (elt link-set 1) color-table (list (color (+ minval_front (* 2 diff_front)) (+ minval_front diff_front) (elt *result-msg* (elt link-set 2))) 
+					     (color (+ minval_front diff_front) minval_front (elt *result-msg* (elt link-set 2)))
+					     (color (+ minval_back (* 2 diff_back)) (+ minval_back diff_back) (elt *result-msg* (+ (elt link-set 2) 1))) 
+					     (color (+ minval_back diff_back) minval_back (elt *result-msg* (+ (elt link-set 2) 1)))
+					     ))
+      )
+
     (dolist (link-name link-names)
       (dotimes (i 4)
 	(setq cube-list
 	      (append cube-list (list (cube->marker-msg (elt (gethash link-name cube-table) i)
 							(gethash link-name header-table)
-							:color (float-vector 0 1 0)
-							;; : color (elt (gethash link-name color-table) i)
+							;;:color (float-vector 0 1 0)
+							:color (elt (gethash link-name color-table) i)
      ))))))
     (setq cube-array-msg (instance visualization_msgs::MarkerArray :init))
     ;; Publish
@@ -145,7 +202,7 @@
     (x::window-main-one)
     (ros::spin-once)
     (ros::sleep)
-    ))
+    )))
 
 (test-pub)
 
