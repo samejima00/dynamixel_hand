@@ -1,0 +1,30 @@
+<launch>
+  <arg name="rosbag" doc="rosbag file path" />
+  <arg name="compress" default="false" doc="whether compress rosbag or not." />
+
+  <arg if="$(arg compress)" name="compress_flag" value="--bz2" />
+  <arg unless="$(arg compress)" name="compress_flag" value="" />
+  <arg name="filename" />
+  <node name="rosbag_record" pkg="rosbag" type="record"
+	args="-b 0
+	      /rosout
+	      /tf
+	      /tf_static
+	      /joint_status
+	      /head_camera/rgb/image_raw/compressed
+	      /head_camera/depth/image_raw/compressedDepth
+	      /head_camera/depth/camera_info
+	      /head_camera/rgb/camera_info
+              /lhsensor
+              /lhsensor_cop
+              /off_lhsensor
+              /ref_lhsensor
+              /rhsensor
+              /rhsensor_cop
+              /off_rhsensor
+              /ref_rhsensor
+
+              /dynamixel_hand_controller/joint_states
+              /touch_data"
+	output="screen" />  
+</launch>
