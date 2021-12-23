@@ -6,6 +6,7 @@
 (defvar *pub-cube-array-topic* "/cube_array_topic")
 (defvar *pub-cube-topic* "/cube_topic")
 (defvar *sub-sensor-data* "/touch_data")
+(defvar *sensor-data-topic* "/touch_result")
 
 (defun callback (msg)
   ;;(print (list 'a (send msg :data)))
@@ -13,6 +14,7 @@
 
 (ros::advertise *pub-cube-array-topic* visualization_msgs::MarkerArray 5)
 (ros::advertise *pub-cube-topic* visualization_msgs::Marker 5)
+(ros::advertise *sensor-data-topic* std_msgs::Float32MultiArray 5)
 (ros::subscribe "/touch_data" std_msgs::Float32MultiArray #'callback)
 
 (unix:usleep (* 1000 1000))
@@ -27,11 +29,15 @@
     (t (float-vector 0 1 0)))
   )
 
+(defun sensor (min max val)
+  (* (/ (- val min) (- max min)) 100)
+  )
+
 (setq sensor-data (make-matrix 4 2
-      '((550 680)
-      (610 755)
-      (470 670)
-      (650 760))))
+      '((550 700)
+      (610 710)
+      (470 640)
+      (650 730))))
 
 ;; (defun test-pub ()
 ;;   (let* ((cube-array-msg (instance visualization_msgs::MarkerArray :init))
@@ -101,7 +107,9 @@
 	 (cube-table (make-hash-table :test #'equal))
 	 (color-table (make-hash-table :test #'equal))
 	 (sensor-table (make-hash-table :test #'equal))
-	 cube-list)
+	 cube-list
+	 (sensor-data-msg (instance std_msgs::Float32MultiArray :init))
+	 sensor-data-list)
     ;; Set header and cube for each link
     (dolist (link-name link-names)
       (sethash link-name header-table
@@ -182,8 +190,6 @@
 					     ))
       )
 
-    (print (gethash "1st_Link" color-table))
-    (print (gethash "1st_Link2" color-table))
     (dolist (link-name link-names)
       (dotimes (i 4)
 	(setq cube-list
@@ -193,13 +199,23 @@
 							:color (elt (gethash link-name color-table) i)
      ))))))
     (setq cube-array-msg (instance visualization_msgs::MarkerArray :init))
+    (dotimes (i 4) 
+      (setq sensor-data-list
+        (append sensor-data-list (list (sensor (aref sensor-data i 0) (aref sensor-data i 1) (elt *result-msg* i))))
+      )
+    )
+
+    ;;(print (list (sensor (aref sensor-data 0 0) (aref sensor-data 0 1) (elt *result-msg* 0))))
+    ;;(print sensor-data-msg)
     ;; Publish
     ;;(send cube-array-msg :markers cube-list)
     (dotimes (i 16)
       (send (elt cube-list i) :id i)
       )
     (send cube-array-msg :markers cube-list)
+    (send sensor-data-msg :data sensor-data-list)
     (ros::publish *pub-cube-array-topic* cube-array-msg)
+    (ros::publish *sensor-data-topic* sensor-data-msg)
     (x::window-main-one)
     (ros::spin-once)
     (ros::sleep)
