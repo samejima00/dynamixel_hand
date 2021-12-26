@@ -220,6 +220,9 @@
     (ros::spin-once)
     (ros::sleep)
     )))
+  
 
+
+(init-calib)
 (test-pub)
 
