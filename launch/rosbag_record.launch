@@ -25,6 +25,7 @@
               /ref_rhsensor
 
               /dynamixel_hand_controller/joint_states
-              /touch_data"
+              /touch_data
+	      /touch_result" 
 	output="screen" />  
 </launch>
