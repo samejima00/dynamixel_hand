@@ -26,6 +26,8 @@
 
               /dynamixel_hand_controller/joint_states
               /touch_data
-	      /touch_result" 
+	      /touch_result
+	      /cube_array_topic
+	      /boxes" 
 	output="screen" />  
 </launch>
