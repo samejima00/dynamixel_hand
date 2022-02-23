@@ -23,7 +23,7 @@
     bx))
 
 (defun box-callback(msg)
-  (unless (send msg :boxes) (return-from box-callback nil))
+  (unless (send msg :boxes) (progn (print "no box")(setq *target-cube* nil)(return-from box-callback nil)))
   (setq *target-bbox* (elt (send msg :boxes) 0))
   (setq *target-cube* (bbox->cube *target-bbox*))
   )
@@ -37,20 +37,17 @@
 (ros::subscribe "/touch_result" std_msgs::Float32MultiArray #'callback)
 (ros::subscribe "/boxes" jsk_recognition_msgs::BoundingBoxArray #'box-callback)
 
-
-(do-until-key
-  (ros::spin-once)
-  (print (send *target-cube* :pos))
-  (unix::sleep 2))
-
 (setq *result-data* (float-vector 0 0 0 0))
 
-(setq pre-pose #f(120 10 40 0 -40 -20 100))
-(setq grasp-pose #f(120 -40 130 0 -120 -40 100))
+(setq pre-pose #f(120 -20 0 0 -40 -20 100))
+(setq grasp-pose #f(120 30 80 0 -120 -40 100))
+(setq head-coords (float-vector 500 0 200))
 
 (hironxjsk-init)
 (setq new-endcoords (make-cascoords :coords (send (send *hironxjsk* :larm :end-coords :copy-worldcoords) :translate #f(0 0 -300) :local)))
 (send (send *hironxjsk* :larm :end-coords :parent) :assoc new-endcoords)
+
+(send *hironxjsk* :look-at-target head-coords)
 
 (send *hironxjsk* :larm :inverse-kinematics 
       (make-coords :pos #f(500 0 300) :rpy (float-vector (deg2rad -90) 0 (deg2rad 90))))
@@ -65,11 +62,23 @@
 (send *hironxjsk* :larm :inverse-kinematics (make-coords :pos #f(590 200 100) :rpy (float-vector (deg2rad -110) (deg2rad -180) (deg2rad 110))) :move-target new-endcoords)
 (send *ri* :angle-vector (send *hironxjsk* :angle-vector))
 (send *ri* :wait-interpolation)
+(setq count 0)
+(setq *target-cube* nil)
 (while t
     (ros::spin-once)
-    (when (send *target-cube* :pos) (return nil))
-    (ros::sleep)
-    )
+    (when *target-cube* (print "found")(return nil))
+    (unix::sleep 1)
+    (print count)
+    (setq count (+ 1 count))
+    (when (= (mod count 5) 0)
+      (if (< (elt head-coords 1) 0)
+        (setq head-coords (float-vector (- 500 (* (floor (/ count 30)) 100)) (* (ceiling (/ count 10)) 30) 300))
+	(setq head-coords (float-vector (- 500 (* (floor (/ count 30)) 100)) (* (ceiling (/ count 10)) -30) 300))
+	)
+      (send *hironxjsk* :look-at-target head-coords)
+      (send *ri* :angle-vector (send *hironxjsk* :angle-vector))
+      (send *ri* :wait-interpolation)
+    ))
 (setq x-pos (+ (elt (send *target-cube* :pos) 0) 50))
 (setq y-pos (elt (send *target-cube* :pos) 1))
 
@@ -81,7 +90,7 @@
     (do-until-key (unix::sleep 1))
 
     (send *hironxjsk* :larm :inverse-kinematics
-	  (make-coords :pos (float-vector x-pos y-pos -65) :rpy (float-vector (deg2rad -110) (deg2rad -180) (deg2rad 110))) :move-target new-endcoords)
+	  (make-coords :pos (float-vector x-pos y-pos -70) :rpy (float-vector (deg2rad -110) (deg2rad -180) (deg2rad 110))) :move-target new-endcoords)
     (send *ri* :angle-vector (send *hironxjsk* :angle-vector))
     (send *ri* :wait-interpolation)
     (send *hand* :angle-vector (send *hand_model5* :angle-vector grasp-pose) :fast :default-controller 0 :min-time 0.05)
